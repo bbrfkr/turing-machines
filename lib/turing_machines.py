@@ -6,9 +6,10 @@ from .utils import (
     check_tape,
 )
 
+
 class SingleTapeTuringMachine:
     is_valid = False
-    
+
     class Index(Enum):
         NOW_STATE = 0
         READ_ALPHABET = 1
@@ -23,7 +24,7 @@ class SingleTapeTuringMachine:
         states: list[str],
         initial_state: str,
         halt_state: str,
-        program: list[tuple[str, str, str, str, int]]
+        program: list[tuple[str, str, str, str, int]],
     ):
         self.tape = tape
         self.alphabets = alphabets
@@ -40,7 +41,7 @@ class SingleTapeTuringMachine:
         if not check_states(
             states=self.states,
             initial_state=self.initial_state,
-            halt_state=self.halt_state
+            halt_state=self.halt_state,
         ):
             raise ValidationError("states list is not valid.")
         if not self._check_program():
@@ -53,35 +54,45 @@ class SingleTapeTuringMachine:
         step = 0
         state = self.initial_state
         head = 0
-        while(state != self.halt_state):
+        while state != self.halt_state:
             print(f"===== step {step} =====")
             self.print_tape_and_head(head)
             alphabet = self.tape[head]
             for row in self.program:
-                if row[self.Index.READ_ALPHABET.value] == alphabet and row[self.Index.NOW_STATE.value] == state:
-                    self.tape = self.tape[:head] + row[self.Index.WRITTEN_ALPHABET.value] + self.tape[head+1:]
+                if (
+                    row[self.Index.READ_ALPHABET.value] == alphabet
+                    and row[self.Index.NOW_STATE.value] == state
+                ):
+                    self.tape = (
+                        self.tape[:head]
+                        + row[self.Index.WRITTEN_ALPHABET.value]
+                        + self.tape[head + 1 :]
+                    )
                     state = row[self.Index.NEXT_STATE.value]
                     if head != 0 or row[self.Index.DIRECTION_HEAD.value] != -1:
                         head = head + row[self.Index.DIRECTION_HEAD.value]
                     step = step + 1
                     break
-        print(f"===== step {step} =====")
+                # programを全走査しても対象行がない場合はエラー
+                if row == self.program[-1]:
+                    print(f"execution error!")
+                    return False
+        print(f"===== step final =====")
         self.print_tape_and_head(head)
         return True
 
-
     def print_tape_and_head(self, head):
         print(self.tape)
-        print(''.join([' ' for _ in range(head)]) + '↑') 
+        print("".join([" " for _ in range(head)]) + "↑")
 
     def _check_program(self):
         for row in self.program:
             if (
-                (row[self.Index.READ_ALPHABET.value] not in self.alphabets) or
-                (row[self.Index.WRITTEN_ALPHABET.value] not in self.alphabets) or 
-                (row[self.Index.NOW_STATE.value] not in self.states) or 
-                (row[self.Index.NEXT_STATE.value] not in self.states) or 
-                (row[self.Index.DIRECTION_HEAD.value] not in [0,1,-1])
+                (row[self.Index.READ_ALPHABET.value] not in self.alphabets)
+                or (row[self.Index.WRITTEN_ALPHABET.value] not in self.alphabets)
+                or (row[self.Index.NOW_STATE.value] not in self.states)
+                or (row[self.Index.NEXT_STATE.value] not in self.states)
+                or (row[self.Index.DIRECTION_HEAD.value] not in [0, 1, -1])
             ):
                 return False
         return True

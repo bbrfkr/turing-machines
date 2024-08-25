@@ -11,11 +11,13 @@ def check_alphabets(alphabets: list[str]):
             return False
     return True
 
+
 def check_tape(tape: str, alphabets: list[str]):
     for alphabet in tape:
         if alphabet in alphabets:
             return True
     return False
+
 
 def check_states(states: list[str], initial_state: str, halt_state: str):
     # check uniqueness
@@ -25,6 +27,8 @@ def check_states(states: list[str], initial_state: str, halt_state: str):
         return False
 
     # check initial_state
-    if (initial_state in states) and (halt_state in states) and (initial_state != halt_state):
-        return True
-    return False
+    return (
+        (initial_state in states)
+        and (halt_state in states)
+        and (initial_state != halt_state)
+    )
