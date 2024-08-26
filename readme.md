@@ -6,6 +6,12 @@
 python identity_function.py
 ```
 
+1. xor bits function
+
+```
+python xor_bits_function.py
+```
+
 1. reverse bits function
 
 ```
