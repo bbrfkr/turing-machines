@@ -56,7 +56,7 @@ class SingleTapeTuringMachine:
         head = 0
         while state != self.halt_state:
             print(f"===== step {step} =====")
-            self.print_tape_and_head(head)
+            self.print_tape_and_head_and_state(head, state)
             alphabet = self.tape[head]
             for row in self.program:
                 if (
@@ -78,12 +78,13 @@ class SingleTapeTuringMachine:
                     print(f"execution error!")
                     return False
         print(f"===== step final =====")
-        self.print_tape_and_head(head)
+        self.print_tape_and_head_and_state(head, state)
         return True
 
-    def print_tape_and_head(self, head):
+    def print_tape_and_head_and_state(self, head, state):
         print(self.tape)
         print("".join([" " for _ in range(head)]) + "↑")
+        print(f"state: {state}")
 
     def _check_program(self):
         for row in self.program:
