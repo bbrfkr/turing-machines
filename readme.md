@@ -18,8 +18,14 @@
     python reverse_bits_function.py
     ```
 
+1. increment bits function
+
+    ```
+    python increment_function.py
+    ```
+
 1. sum bits function (for 4 bits)
 
     ```
-    python reverse_bits_function.py
+    python sum_bits_function.py
     ```
